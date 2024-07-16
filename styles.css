@@ -143,3 +143,13 @@ body {
     padding: 10px;
     box-shadow: 0 0px 10px rgba(0, 0, 0, 0.397);
 }
+.custom-overlay {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    transform: rotate(45deg);
+}
+.custom-overlay img {
+    max-width: 100px;
+    height: auto; /* 세로 크기는 자동 조절 */
+}
