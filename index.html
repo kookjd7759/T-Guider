@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>T-Guider Simulator</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 외부 CSS 파일 연결 -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0f21df901cb4dab8b3bb2c037fa01d08"></script>
+</head>
+<body>
+    <div class="phone-container">
+        <div id="map" class="map-container"> 
+            <div class="button_chat"> 
+                <span onclick="openChat()"><img src="Image/Button_chat.png"></span>  
+            </div>
+            <div class="chatbox" id="chatbox">
+                <div class="close-button" onclick="closeChat()">X</div>
+                <!-- 대화창 메시지들이 추가될 곳 -->
+            </div>
+            
+            <div class="bottom_bar" id="bottom_bar">
+                <div class="bottom_button" onclick="btn_setting()">
+                    <img src="Image/icon_setting.png" alt="setting"> </div>
+                <div class="bottom_button" onclick="btn_train()">
+                    <img src="Image/icon_train.png" alt="train"> </div>
+                <div class="bottom_button" onclick="btn_map()">
+                    <img src="Image/icon_map.png" alt="map"> </div>
+                <div class="bottom_button" onclick="btn_ticket()">
+                    <img src="Image/icon_ticket.png" alt="ticket"> </div>
+                <div class="bottom_button" onclick="btn_more()">
+                    <img src="Image/icon_more.png" alt="Icon 5"> </div>
+            </div>
+
+            <div class="window" id="test">
+                <div class="close-button" onclick="closeWindow()">X</div>
+            </div>
+        </div>
+
+        <div class="side_buttons">
+            <div class="side_button" onclick="example_case1()">열차 지연 발생</div>
+            <div class="side_button" onclick="example_case2()">버튼 2</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- 외부 JavaScript 파일 연결 -->
+</body>
+</html>
