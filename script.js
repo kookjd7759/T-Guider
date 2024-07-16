@@ -14,7 +14,10 @@ function init(){
         37.553037716208834, 126.97266951407535
     );
     map_makeImageMarker('Image/train_R.png', 100, 30, 50, 15, 37.59925667145015, 126.86491641375935);
+    map_makeImageMarker('Image/Start.png', 40, 54, 20, 54, 37.553037716208834, 126.97266951407535);
+    map_customOverLay('13:20 도착 예정', 37.55, 126.97266951407535);
 } init();
+
 
 
 function map_MovePosition(x, y) {
@@ -55,7 +58,21 @@ function map_makeLine(x1, y1, x2, y2){
     polyline.setMap(map);
 }
 
+function map_customOverLay(text, x, y){
+    var content = '<div class ="label"><span class="left"></span><span class="center"><b>' + text + '</b></span><span class="right"></span></div>';
 
+    // 커스텀 오버레이가 표시될 위치입니다 
+    var position = new kakao.maps.LatLng(x, y);  
+
+    // 커스텀 오버레이를 생성합니다
+    var customOverlay = new kakao.maps.CustomOverlay({
+        position: position,
+        content: content   
+    });
+
+    // 커스텀 오버레이를 지도에 표시합니다
+    customOverlay.setMap(map);
+}
 
 
 
@@ -121,10 +138,15 @@ function addMessage(imageSrc, text) {
 function example_case1(){
     map_makeImageMarker('Image/Workmark.png', 60, 90, 20, 85, 37.58124795898554, 126.90667902766954);
     map_MovePosition(37.58124795898554, 126.90667902766954);
+    map_customOverLay('<p style="color:red">+00:05 지연</p>', 37.544, 126.969);
+
+    setTimeout(() => {
+        map_MovePosition(37.55, 126.97266951407535);
+    }, 2000);
 
     setTimeout(() => {
         openChat();
-    }, 2000);
+    }, 4000);
     
     let messages = [
         { img: 'Image/T-bot_profile.png', text: '열차가 10분 지연되었어요.' },
@@ -137,10 +159,9 @@ function example_case1(){
                 addMessage(message.img, message.text);
             }, 1500 * (index + 1));
         });
-    }, 2000);
+    }, 4000);
     
 }
 
 function example_case2(){
-
 }
