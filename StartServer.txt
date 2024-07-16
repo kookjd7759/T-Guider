@@ -1,0 +1,2 @@
+cd C:\WorkSpace\Visual Studio Code Workspace\T-Guider
+python -m http.server 8080

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>T-Guider Simulator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+        }
+        .phone-container {
+            position: relative;
+            width: 500px; /* 핸드폰 이미지의 너비 */
+            height: 950px; /* 핸드폰 이미지의 높이 */
+            background: url('Image/phone.png') no-repeat center center;
+            background-size: cover;
+        }
+        .map-container {
+            position: absolute;
+            top: 99px; /* 핸드폰 스크린의 상단 위치 조정 */
+            left: 20px; /* 핸드폰 스크린의 왼쪽 위치 조정 */
+            width: 462px; /* 핸드폰 스크린의 너비 */
+            height: 759px; /* 핸드폰 스크린의 높이 */
+            background-color: white;
+            overflow: hidden;
+            border-radius: 7px; /* 핸드폰 스크린의 모서리를 둥글게 */
+        } 
+        .button_chat {
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            width: 80px;
+            height: 80px;
+            overflow: hidden;
+            z-index: 2;
+            background-color: #ff000000;
+        } 
+        .button_chat span img {
+            width: 70px;
+            height: 70px;
+            padding: 5px ;
+            filter: drop-shadow(0px 0px 5px #7c7c7c); /*그림자*/
+            border: none;
+        } 
+        .chatbox {
+            position: absolute;
+            top: 60px;
+            right: 30px;
+            width: 384px;
+            height: 500px;
+            background-color: rgba(0, 191, 255, 0.267);
+            border-radius: 10px;
+            display: none;
+            z-index: 3;
+            padding: 10px;
+            box-shadow: 0 0px 10px rgba(0, 0, 0, 0.397);
+            overflow-y: auto; /* 메시지가 많아지면 스크롤 가능하게 설정 */
+        }
+        .chatbox .message {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .chatbox .message img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .chatbox .message p {
+            background-color: #ffffffdc;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+        .bottom_bar {
+            position: absolute;
+            top: 675px; 
+            left: -10px;
+            width: 462px;
+            height: 90px;
+            z-index: 3;
+            background-color: rgba(255, 255, 255, 0.445);
+            display: flex;
+            justify-content: space-between; /* 가로 방향으로 각 요소 사이의 간격을 균등하게 배치 */
+            align-items: center;
+            padding: 0 10px; /* 좌우 여백 추가 */
+            border-radius: 7px;
+        }
+        .bottom_button {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.459);
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0px 5px rgba(0, 0, 0, 0.397);
+        }
+        .bottom_button img {
+            width: 50px;
+            height: 50px;
+        }
+        .side_buttons {
+            position: absolute;
+            top: 50%; /* 중앙 정렬을 위한 위치 조정 */
+            right: -150px; /* 오른쪽으로 벗어난 위치 */
+            transform: translateY(-50%); /* 세로 중앙 정렬을 위한 transform */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .side_button {
+            width: 120px;
+            height: 40px;
+            background-color: #ffcc00;
+            border: 2px solid #f0c800;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        .window{
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            width: 400px;
+            height: 600px;
+            background-color: rgba(255, 255, 255, 0.664);
+            border-radius: 10px;
+            display: none;
+            z-index: 3;
+            padding: 10px;
+            box-shadow: 0 0px 10px rgba(0, 0, 0, 0.397);
+        }
+    </style>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0f21df901cb4dab8b3bb2c037fa01d08"></script>
+</head>
+<body>
+    <div class="phone-container">
+        <div id="map" class="map-container"> 
+            <div class="button_chat"> 
+                <span onclick="openChat()"><img src="Image/Button_chat.png"></span>  
+            </div>
+            <div class="chatbox" id="chatbox">
+                <div class="close-button" onclick="closeChat()">X</div>
+                <!-- 대화창 메시지들이 추가될 곳 -->
+            </div>
+            
+            <div class="bottom_bar" id="bottom_bar">
+                <div class="bottom_button" onclick="btn_setting()">
+                    <img src="Image/icon_setting.png" alt="setting"> </div>
+                <div class="bottom_button" onclick="btn_train()">
+                    <img src="Image/icon_train.png" alt="train"> </div>
+                <div class="bottom_button" onclick="btn_map()">
+                    <img src="Image/icon_map.png" alt="map"> </div>
+                <div class="bottom_button" onclick="btn_ticket()">
+                    <img src="Image/icon_ticket.png" alt="ticket"> </div>
+                <div class="bottom_button" onclick="btn_more()">
+                    <img src="Image/icon_more.png" alt="Icon 5"> </div>
+            </div>
+
+            <div class="window" id="test">
+                <div class="close-button" onclick="closeWindow()">X</div>
+            </div>
+        </div>
+
+        <div class="side_buttons">
+            <div class="side_button" onclick="example_case1()">열차 지연 발생</div>
+            <div class="side_button" onclick="example_case2()">버튼 2</div>
+        </div>
+    </div>
+
+
+    
+    <script>
+        // 지도를 생성합니다.
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(37.59, 126.88), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        // 지도를 생성합니다.
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        function map_MovePosition(x, y) {
+            var moveLatLon = new kakao.maps.LatLng(x, y);
+            map.panTo(moveLatLon);
+        }
+
+        function map_makeImageMarker(x, y){
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다    
+                imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+                imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                
+            // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+                markerPosition = new kakao.maps.LatLng(x, y); // 마커가 표시될 위치입니다
+
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                position: markerPosition, 
+                image: markerImage // 마커이미지 설정 
+            });
+
+            // 마커가 지도 위에 표시되도록 설정합니다
+            marker.setMap(map);  
+        }
+
+        function map_makeLine(x1, y1, x2, y2){
+            var linePath = [
+                new kakao.maps.LatLng(x1, y1),
+                new kakao.maps.LatLng(x2, y2)
+            ];
+
+            // 지도에 표시할 선을 생성합니다
+            var polyline = new kakao.maps.Polyline({
+                path: linePath, // 선을 구성하는 좌표배열 입니다
+                strokeWeight: 6, // 선의 두께 입니다
+                strokeColor: '#255bbd', // 선의 색깔입니다
+                strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle: 'dash' // 선의 스타일입니다
+            });
+
+            // 지도에 선을 표시합니다 
+            polyline.setMap(map);  
+        }
+
+
+        function openChat() {
+            document.querySelector('.button_chat').style.display = 'none';
+            document.getElementById('chatbox').style.display = 'block';
+        }
+
+        function closeChat() {
+            document.querySelector('.button_chat').style.display = 'block';
+            document.getElementById('chatbox').style.display = 'none';
+        }
+
+
+        function openWindow() {
+            document.querySelector('.button_chat').style.display = 'none';
+            document.getElementById('test').style.display = 'block';
+        }
+
+        function closeWindow() {
+            document.querySelector('.button_chat').style.display = 'block';
+            document.getElementById('test').style.display = 'none';
+        }
+
+
+        function btn_setting(){
+            openWindow();
+        }
+        function btn_train(){
+            openWindow();
+        }
+        function btn_map(){
+            openWindow();
+        }
+        function btn_ticket(){
+            openWindow();
+        }
+        function btn_more(){
+            openWindow();
+        }
+
+        function addMessage(imageSrc, text) {
+            const chatbox = document.getElementById('chatbox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.alt = 'Profile Image';
+
+            const textParagraph = document.createElement('p');
+            textParagraph.innerText = text;
+
+            messageDiv.appendChild(img);
+            messageDiv.appendChild(textParagraph);
+            chatbox.appendChild(messageDiv);
+
+            // Ensure the chatbox scrolls to the bottom for new messages
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        function example_case1(){
+            setTimeout(() => {
+                openChat();
+            }, 500);
+            
+            let messages = [
+                { img: 'Image/T-bot_profile.png', text: '열차가 10분 지연되었어요.' },
+                { img: 'Image/T-bot_profile.png', text: `행신역 ⇔ 서울역 간 안전을 위한 
+                선로 보수로 열차가 서행 중이에요. 열차 출발 시각이 13시 30분으로 지연되었어요.` }
+            ];
+            
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    addMessage(message.img, message.text);
+                }, 1500 * (index + 1));
+            });
+        }
+
+        function example_case2(){
+            map_makeLine(
+                37.61221888449836, 126.83426767432115,
+                37.553037716208834, 126.97266951407535
+            )
+            map_makeImageMarker(37.59256540921204, 126.88031073290747)
+        }
+    </script>
+</body>
+</html>
