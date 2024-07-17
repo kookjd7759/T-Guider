@@ -3,7 +3,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: white;
+    background-color: rgb(239, 239, 239);
 }
 .phone-container {
     position: relative;
@@ -53,21 +53,30 @@ body {
     box-shadow: 0 0px 10px rgba(0, 0, 0, 0.397);
     overflow-y: auto;
 }
-.chatbox .message {
+.chatbox .message_bot {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
-.chatbox .message img {
+.chatbox .message_bot img {
     width: 40px;
     height: 40px;
     margin-right: 10px;
 }
-.chatbox .message p {
+.chatbox .message_bot p {
     background-color: #ffffffdc;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
+}
+.chatbox .message_user {
+    background-color: #fdf79bdc;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    max-width: 70%;
+    align-self: flex-end; 
 }
 .close-button {
     position: absolute;

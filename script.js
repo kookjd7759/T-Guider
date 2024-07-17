@@ -116,19 +116,33 @@ function btn_more(){
 
 
 
-function addMessage(imageSrc, text) {
+function addMessage_bot(text) {
     const chatbox = document.getElementById('chatbox');
     const messageDiv = document.createElement('div');
-    messageDiv.className = 'message';
+    messageDiv.className = 'message_bot';
 
     const img = document.createElement('img');
-    img.src = imageSrc;
+    img.src = 'Image/T-bot_profile.png';
     img.alt = 'Profile Image';
 
     const textParagraph = document.createElement('p');
     textParagraph.innerText = text;
 
     messageDiv.appendChild(img);
+    messageDiv.appendChild(textParagraph);
+    chatbox.appendChild(messageDiv);
+
+    chatbox.scrollTop = chatbox.scrollHeight;
+} addMessage_bot('안녕하세요 T-Guider 입니다. \n궁금한게 있으시면 언제든지 물어보세요.')
+
+function addMessage_user(text) {
+    const chatbox = document.getElementById('chatbox');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message_user';
+
+    const textParagraph = document.createElement('p');
+    textParagraph.innerText = text;
+
     messageDiv.appendChild(textParagraph);
     chatbox.appendChild(messageDiv);
 
@@ -149,19 +163,34 @@ function example_case1(){
     }, 4000);
     
     let messages = [
-        { img: 'Image/T-bot_profile.png', text: '열차가 10분 지연되었어요.' },
-        { img: 'Image/T-bot_profile.png', text: `행신역 ⇔ 서울역 간 안전을 위한 
+        { text: '열차가 10분 지연되었어요.' },
+        { text: `행신역 ⇔ 서울역 간 안전을 위한 
         선로 보수로 열차가 서행 중이에요. 열차 출발 시각이 13시 30분으로 지연되었어요.` }
     ];
     setTimeout(() => {
         messages.forEach((message, index) => {
             setTimeout(() => {
-                addMessage(message.img, message.text);
+                addMessage_bot(message.text);
             }, 1500 * (index + 1));
         });
     }, 4000);
-    
 }
 
 function example_case2(){
+    openChat();
+    
+    var delay = 0;
+    delay += 1500;
+    setTimeout(() => {
+        addMessage_user('출발역까지 얼마나걸려 ?')
+    }, delay);
+    
+    delay += 1500;
+    setTimeout(() => {
+        addMessage_bot('현재 위치에서 서울역까지 대중교통으로 58분 소요돼요.')
+    }, delay);
+    delay += 2000;
+    setTimeout(() => {
+        addMessage_bot('13시 20분 열차를 탑승하기 위해 최소 12시 00분에 출발하는 것이 좋아요.')
+    }, delay);
 }
