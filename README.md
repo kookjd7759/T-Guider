@@ -4,8 +4,6 @@
 ### 열차 지연 발생
 <img src = "https://github.com/user-attachments/assets/aefc428e-8798-44f4-a06a-294bb88838c6" width="60%" height="60%">
 
-**열차 지연시**
-
 #### 제안 서비스
 
 ○ 출발역까지의 경로 안내
